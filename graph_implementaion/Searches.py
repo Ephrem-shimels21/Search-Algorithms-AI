@@ -3,6 +3,10 @@ from Graph import Graph
 import heapq
 import math
 import random
+import matplotlib.pyplot as plt
+import time
+import random
+import networkx as nx
 
 
 def dfs(adj_list, start, end, path = []):
@@ -15,6 +19,52 @@ def dfs(adj_list, start, end, path = []):
             if new_path:
                 return new_path
     return None
+def iterative_deepening_search(graph, start_node, goal_node, max_depth):
+    for depth in range(max_depth + 1):
+        visited = set()
+        result = depth_limited_search(
+            graph, start_node, goal_node, visited, depth)
+        if result is not None:
+            return result
+    return None
+def depth_limited_search(graph, current_node, goal_node, visited, depth):
+    if depth == 0:
+        if current_node == goal_node:
+            return [current_node]
+        else:
+            return None
+    elif depth > 0:
+        visited.add(current_node)
+        for neighbor in graph[current_node]:
+            if neighbor not in visited:
+                result = depth_limited_search(
+                    graph, neighbor, goal_node, visited, depth - 1)
+                if result is not None:
+                    return [current_node] + result
+    return None
+graph = {
+    'Arad': ['Zerind', 'Sibiu', 'Timisoara'],
+    'Zerind': ['Oradea', 'Arad'],
+    'Oradea': ['Zerind', 'Sibiu'],
+    'Timisoara': ['Arad', 'Lugoj'],
+    'Lugoj': ['Timisoara', 'Mehadia'],
+    'Mehadia': ['Lugoj', 'Drobeta'],
+    'Drobeta': ['Mehadia', 'Craiova'],
+    'Craiova': ['Drobeta', 'Rimnicu Vilcea', 'Pitesti'],
+    'Rimnicu Vilcea': ['Craiova', 'Sibiu', 'Pitesti'],
+    'Sibiu': ['Oradea', 'Arad', 'Fagaras', 'Rimnicu Vilcea'],
+    'Fagaras': ['Sibiu', 'Bucharest'],
+    'Pitesti': ['Craiova', 'Rimnicu Vilcea', 'Bucharest'],
+    'Bucharest': ['Fagaras', 'Pitesti', 'Urziceni', 'Giurgiu'],
+    'Urziceni': ['Bucharest', 'Hirsova', 'Vaslui'],
+    'Eforie': ['Hirsova'],
+    'Hirsova': ['Urziceni', 'Eforie'],
+    'Vaslui': ['Urziceni', 'Iasi'],
+    'Iasi': ['Vaslui', 'Neamt'],
+    'Neamt': ['Iasi'],
+    'Giurgiu': ['Bucharest']
+}
+
 
 
 Data = {}
